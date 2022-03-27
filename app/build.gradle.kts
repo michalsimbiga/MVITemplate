@@ -61,7 +61,7 @@ dependencies {
     // DI
     implementation(Libs.DI.HILT_ANDROID)
     implementation(Libs.DI.HILT_NAVIGATION)
-    kapt(Libs.DI.HILT_ANDROID_COMPILER)
+    kapt(Libs.DI.HILT_COMPILER)
 
     // Compose
     implementation(Libs.UI.COMPOSE_UI)

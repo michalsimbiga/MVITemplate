@@ -46,8 +46,9 @@ object Libs {
         const val HILT_ANDROID = "com.google.dagger:hilt-android:${Versions.HILT}"
         const val HILT_ANDROID_TESTING = "com.google.dagger:hilt-android-testing:${Versions.HILT}"
         const val HILT_VIEWMODEL = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.HILT}"
-        const val HILT_ANDROID_COMPILER = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
-        const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION}"
+        const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
+        const val HILT_NAVIGATION =
+            "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION}"
         const val JAVA_INJECT = "javax.inject:javax.inject:1"
     }
 
