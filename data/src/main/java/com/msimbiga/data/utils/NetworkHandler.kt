@@ -1,7 +1,6 @@
 package com.msimbiga.data.utils
 
 import com.msimbiga.domain.errors.ProjectError
-import com.payeye.eyepos.network.utils.ApiResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 

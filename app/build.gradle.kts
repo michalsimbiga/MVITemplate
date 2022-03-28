@@ -51,6 +51,10 @@ android {
 }
 dependencies {
 
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
+
     // Core
     implementation(Libs.Core.APP_COMPAT)
     implementation(Libs.Core.CORE_KTX)

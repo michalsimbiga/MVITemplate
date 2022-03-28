@@ -2,7 +2,7 @@ package com.msimbiga.data.di
 
 import com.msimbiga.data.services.CharacterApiService
 import com.msimbiga.domain.AppConfiguration
-import com.payeye.eyepos.network.utils.ErrorHandlingCallAdapterFactory
+import com.msimbiga.data.utils.ErrorHandlingCallAdapterFactory
 import com.msimbiga.data.utils.NetworkHandler
 import com.squareup.moshi.Moshi
 import dagger.Module

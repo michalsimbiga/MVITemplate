@@ -1,16 +1,15 @@
-package com.payeye.eyepos.network.repositories
+package com.msimbiga.data.repositories
 
 import com.google.common.truth.Truth
 import com.msimbiga.data.models.CharacterListResponse
 import com.msimbiga.data.models.toResponse
-import com.msimbiga.data.repositories.CharacterRepositoryImpl
 import com.msimbiga.data.services.CharacterApiService
 import com.msimbiga.data.utils.NetworkHandler
 import com.msimbiga.domain.errors.ProjectError
 import com.msimbiga.domain.models.Mocks
 import com.msimbiga.domain.repositories.CharacterRepository
 import com.nhaarman.mockitokotlin2.*
-import com.payeye.eyepos.network.utils.ApiResult
+import com.msimbiga.data.utils.ApiResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

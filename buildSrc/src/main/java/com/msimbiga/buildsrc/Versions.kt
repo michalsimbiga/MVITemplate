@@ -7,7 +7,7 @@ object Versions {
 //    const val androidTestInstrumentation = "com.msimbiga.eyepos.util.ScreenshotsRunner"
     const val androidTestInstrumentation = "androidx.test.runner.AndroidJUnitRunner"
 
-    const val BUILD_TOOLS = "30.0.2"
+    const val BUILD_TOOLS = "30.0.3"
     const val COMPILE_SDK = 31
     const val TARGET_SDK = 27
     const val MIN_SDK = 27
