@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.msimbiga.application.navigation.Navigator
-import com.msimbiga.application.ui.theme.ApplicationTheme
+import com.msimbiga.application.theme.ApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

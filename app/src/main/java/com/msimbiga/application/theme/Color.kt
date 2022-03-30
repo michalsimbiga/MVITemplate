@@ -1,4 +1,4 @@
-package com.msimbiga.application.ui.theme
+package com.msimbiga.application.theme
 
 import androidx.compose.ui.graphics.Color
 
