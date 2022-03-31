@@ -5,7 +5,6 @@ buildscript {
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}")
 //        classpath("org.jacoco:org.jacoco.core:${Versions.JACOCO}")
 //        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${Versions.SONARQUBE}")
-//        classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}")
     }
 }
 
@@ -13,6 +12,7 @@ plugins {
     id("com.android.application") version "7.1.2" apply false
     id("com.android.library") version "7.1.2" apply false
     id("org.jetbrains.kotlin.android") version "1.6.10" apply false
+    id("com.google.devtools.ksp") version "1.6.10-1.0.4"
 }
 
 tasks.register("clean", Delete::class) {

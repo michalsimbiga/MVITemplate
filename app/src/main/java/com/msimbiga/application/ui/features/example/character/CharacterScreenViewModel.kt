@@ -1,8 +1,7 @@
-package com.payeye.eyepos.ui.features.example.character
+package com.msimbiga.application.ui.features.example.character
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
-import com.msimbiga.application.ui.features.example.character.CharacterNavigator
 import com.msimbiga.application.utils.BaseViewModel
 import com.msimbiga.application.utils.UiState
 import com.msimbiga.application.utils.UiStateData

@@ -2,6 +2,7 @@ package com.msimbiga.application.ui.features.example.detail
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
+import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
 import com.msimbiga.application.utils.BaseViewModel
 import com.msimbiga.application.utils.UiState
 import com.msimbiga.application.utils.UiStateData
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
     private val handle: SavedStateHandle,
+//    private val navArgs: DetailScreenNavArgs,
     private val navigator: DetailNavigator,
     private val getCharacterByIdUseCase: GetCharacterByIdUseCase
 ) : BaseViewModel<DetailsScreenStateData>(
@@ -21,7 +23,7 @@ class DetailScreenViewModel @Inject constructor(
 ) {
 
     init {
-        handle.get<String>(DetailRoute.ARG_KEY)?.let { charId ->
+        DetailScreenDestination.argsFrom(handle).charId.let { charId ->
             Timber.d("VUKO Handle char is $charId")
             loadCharacter(charId)
         }

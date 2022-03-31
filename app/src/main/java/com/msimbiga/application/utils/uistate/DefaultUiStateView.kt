@@ -1,4 +1,4 @@
-package com.payeye.eyepos.composables.uistate
+package com.msimbiga.application.utils.uistate
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

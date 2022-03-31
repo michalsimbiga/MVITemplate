@@ -5,7 +5,9 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
+
 android {
     compileSdk = Versions.COMPILE_SDK
     buildToolsVersion = Versions.BUILD_TOOLS
@@ -37,6 +39,17 @@ android {
         jvmTarget = "1.8"
     }
 
+    kotlin {
+        sourceSets {
+            debug {
+                kotlin.srcDir("build/generated/ksp/debug/kotlin")
+            }
+            release {
+                kotlin.srcDir("build/generated/ksp/release/kotlin")
+            }
+        }
+    }
+
     testOptions {
         animationsDisabled = true
     }
@@ -54,11 +67,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-
     // Core
     implementation(Libs.Core.APP_COMPAT)
     implementation(Libs.Core.CORE_KTX)
-    implementation(Libs.Core.MATERIAL_DESIGN)
     implementation(Libs.Core.LIFECYCLE_RUNTIME_KTX)
     implementation(Libs.Core.COROUTINES_CORE)
 
@@ -76,20 +87,17 @@ dependencies {
     implementation(Libs.UI.COMPOSE_RUNTIME)
     implementation(Libs.UI.COMPOSE_ACTIVITY)
     implementation(Libs.UI.COMPOSE_VIEW_MODEL)
-    implementation(Libs.UI.COMPOSE_LOTTIE)
     implementation(Libs.UI.COMPOSE_UI_UTIL)
     implementation(Libs.UI.COMPOSE_COIL)
-    implementation(Libs.UI.ACCOMPANIST_SYSTEMUICONTROLLER)
-    implementation(Libs.UI.ACCOMPANIST_INSETS_UI)
-
     implementation(Libs.UI.COMPOSE_NAVIGATION)
-    implementation(Libs.UI.ACCOMPANIST_NAVIGATION)
 
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.4.0-beta")
+    implementation("io.github.raamcosta.compose-destinations:core:1.4.0-beta")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.4.0-beta")
 
     // Logging
     implementation(Libs.Utils.TIMBER)
 
-    implementation(Libs.Utils.FIREBASE_POM)
 
     // Tests
     testImplementation(Libs.Test.JUNIT)

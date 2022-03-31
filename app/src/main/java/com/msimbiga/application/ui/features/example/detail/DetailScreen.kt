@@ -1,4 +1,4 @@
-package com.payeye.eyepos.ui.features.example.detail
+package com.msimbiga.application.ui.features.example.detail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -17,14 +17,17 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.msimbiga.application.ui.features.example.detail.DetailRoute
-import com.msimbiga.application.ui.features.example.detail.DetailScreenViewModel
-import com.msimbiga.application.ui.features.example.detail.DetailsScreenEvent
 import com.msimbiga.application.utils.uistate.UiStateView
 import com.msimbiga.domain.models.Character
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination(navArgsDelegate = DetailScreenNavArgs::class)
 @Composable
-fun DetailScreen(viewModel: DetailScreenViewModel = hiltViewModel()) {
+fun DetailScreen(
+    viewModel: DetailScreenViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
+) {
 
     BackHandler {
         viewModel.handleEvent(DetailsScreenEvent.NavigateUp)

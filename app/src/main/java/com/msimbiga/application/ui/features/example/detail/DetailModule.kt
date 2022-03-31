@@ -1,4 +1,4 @@
-package com.payeye.eyepos.ui.features.example.detail
+package com.msimbiga.application.ui.features.example.detail
 
 import com.msimbiga.application.ui.features.example.detail.DetailNavigator
 import com.msimbiga.application.ui.features.example.detail.DetailNavigatorImpl

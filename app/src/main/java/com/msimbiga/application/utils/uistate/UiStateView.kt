@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.msimbiga.application.extensions.alpha
 import com.msimbiga.application.utils.*
-import com.payeye.eyepos.composables.uistate.DefaultLoadingUiStateView
-import com.payeye.eyepos.composables.uistate.DefaultUiStateView
 
 @Composable
 fun <D : UiStateData, VM : BaseViewModel<D>> UiStateView(
@@ -24,9 +22,8 @@ fun <D : UiStateData, VM : BaseViewModel<D>> UiStateView(
         lifecycleOwner = lifecycleOwner,
         initialState = viewModel.initialState
     )
+
     val uiStateData = uiState.getData()
-
-
     val loadingAlpha by animateFloatAsState(if (uiState is UiState.Loading) 1f else 0f)
 
     Box(
@@ -45,7 +42,7 @@ fun <D : UiStateData, VM : BaseViewModel<D>> UiStateView(
                         is UiState.Loading -> 1f
                         else -> 0f
                     }
-                }.apply {
+                } .apply {
                     if (uiState is UiState.Loading) {
                         clickable {
                             // Enable clicks, so user can't click through this layer

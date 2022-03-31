@@ -5,8 +5,6 @@ object Libs {
         const val KOTLIN_REFLECT = "org.jetbrains.kotlin:kotlin-reflect:${Versions.KOTLIN}"
         const val CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
         const val APP_COMPAT = "androidx.appcompat:appcompat:${Versions.APP_COMPAT}"
-        const val MATERIAL_DESIGN =
-            "com.google.android.material:material:${Versions.MATERIAL_DESIGN}"
         const val LIFECYCLE_RUNTIME_KTX =
             "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE_RUNTIME_KTX}"
         const val COROUTINES_CORE =
@@ -67,7 +65,6 @@ object Libs {
 
     object Utils {
         const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
-        const val FIREBASE_POM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_POM}"
     }
 
     object UI {
@@ -90,12 +87,6 @@ object Libs {
         const val COMPOSE_VIEW_MODEL =
             "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.COMPOSE_VIEWMODEL}"
         const val COMPOSE_LOTTIE = "com.airbnb.android:lottie-compose:${Versions.COMPOSE_LOTTIE}"
-        const val ACCOMPANIST_NAVIGATION =
-            "com.google.accompanist:accompanist-navigation-animation:${Versions.ACCOMPANIST}"
         const val COMPOSE_COIL = "io.coil-kt:coil-compose:${Versions.COMPOSE_COIL}"
-        const val ACCOMPANIST_PAGER = "com.google.accompanist:accompanist-pager:${Versions.ACCOMPANIST}"
-        const val ACCOMPANIST_PAGER_INDICATORS = "com.google.accompanist:accompanist-pager-indicators:${Versions.ACCOMPANIST}"
-        const val ACCOMPANIST_SYSTEMUICONTROLLER = "com.google.accompanist:accompanist-systemuicontroller:${Versions.ACCOMPANIST}"
-        const val ACCOMPANIST_INSETS_UI = "com.google.accompanist:accompanist-insets-ui:${Versions.ACCOMPANIST}"
     }
 }

@@ -4,14 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,14 +22,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
 import com.msimbiga.application.utils.uistate.UiStateView
 import com.msimbiga.domain.models.Character
 import com.msimbiga.domain.models.Mocks
-import com.payeye.eyepos.ui.features.example.character.CharacterScreenEvent
-import com.payeye.eyepos.ui.features.example.character.CharacterScreenViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination(start = true)
 @Composable
-fun CharacterScreen(viewModel: CharacterScreenViewModel = hiltViewModel()) {
+fun CharacterScreen(
+    viewModel: CharacterScreenViewModel = hiltViewModel(),
+) {
     LaunchedEffect(viewModel) {
         viewModel.handleEvent(CharacterScreenEvent.LoadData)
     }
@@ -44,7 +41,8 @@ fun CharacterScreen(viewModel: CharacterScreenViewModel = hiltViewModel()) {
     UiStateView(viewModel = viewModel) { state ->
         CharacterScreenContent(
             charList = state.characters,
-            onClick = { id -> viewModel.handleEvent(CharacterScreenEvent.NavigateToId(id.toString())) }
+            {}
+//            onClick = { id -> navigator.navigate(DetailScreenDestination(id.toString())) }
         )
     }
 }
@@ -110,7 +108,11 @@ fun CharacterDescription(modifier: Modifier = Modifier, character: Character) {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
     ) {
-        Text(text = "Name: ${character.name}", style = MaterialTheme.typography.body1, color= MaterialTheme.colors.onPrimary)
+        Text(
+            text = "Name: ${character.name}",
+            style = MaterialTheme.typography.body1,
+            color = MaterialTheme.colors.onPrimary
+        )
         Text(text = "Gender: ${character.gender}")
         Text(text = "Specie: ${character.species}")
     }
