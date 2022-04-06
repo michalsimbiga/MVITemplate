@@ -76,17 +76,11 @@ object Libs {
             "androidx.compose.foundation:foundation-layout:${Versions.COMPOSE}"
         const val COMPOSE_MATERIAL = "androidx.compose.material:material:${Versions.COMPOSE}"
         const val COMPOSE_RUNTIME = "androidx.compose.runtime:runtime:${Versions.COMPOSE}"
-        const val COMPOSE_ANIMATION = "androidx.compose.animation:animation:${Versions.COMPOSE}"
-        const val COMPOSE_ANIMATION_CORE =
-            "androidx.compose.animation:animation-core:${Versions.COMPOSE}"
         const val COMPOSE_NAVIGATION =
             "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
         const val COMPOSE_ACTIVITY = "androidx.activity:activity-compose:${Versions.COMPOSE}"
-        const val COMPOSE_CONSTRAINT =
-            "androidx.constraintlayout:constraintlayout-compose:${Versions.COMPOSE}"
         const val COMPOSE_VIEW_MODEL =
             "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.COMPOSE_VIEWMODEL}"
-        const val COMPOSE_LOTTIE = "com.airbnb.android:lottie-compose:${Versions.COMPOSE_LOTTIE}"
         const val COMPOSE_COIL = "io.coil-kt:coil-compose:${Versions.COMPOSE_COIL}"
     }
 }

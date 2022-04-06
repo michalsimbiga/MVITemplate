@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ApplicationTheme {
-                MainScreen(navigator = navigator)
+                MainScreen()
             }
         }
     }

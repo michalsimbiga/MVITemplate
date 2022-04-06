@@ -4,7 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,31 +31,44 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.msimbiga.application.ui.features.example.destinations.DetailsRouteDestination
 import com.msimbiga.domain.models.Character
 import com.msimbiga.domain.models.Mocks
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination(start = true)
 @Composable
-fun CharacterRoute() {
-    val viewmodel: CharacterScreenViewModel = hiltViewModel()
-    val screenState = viewmodel.uiState.collectAsState()
+fun CharacterRoute(
+    navigator: DestinationsNavigator,
+    viewModel: CharacterRouteViewModel = hiltViewModel()
+) {
+    val screenState = viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.handleEvent(CharacterRouteEvent.LoadData)
+
+        viewModel.navigationEventFlow.collect { destination ->
+            when (destination) {
+                CharacterDirections.Back -> navigator.navigateUp()
+                is CharacterDirections.CharacterDetail -> navigator.navigate(
+                    DetailsRouteDestination(destination.charId)
+                )
+            }
+        }
+    }
 
     CharacterScreen(
         state = screenState.value,
-        onEvent = viewmodel::handleEvent
+        onEvent = viewModel::handleEvent
     )
 }
 
 @Composable
 fun CharacterScreen(
     state: HomeUiState,
-    onEvent: (CharacterScreenEvent) -> Unit
+    onEvent: (CharacterRouteEvent) -> Unit
 ) {
-
-    LaunchedEffect(Unit) {
-        onEvent(CharacterScreenEvent.LoadData)
-    }
 
     when (state) {
         is HomeUiState.HasNoCharacters -> {
@@ -57,7 +77,7 @@ fun CharacterScreen(
         is HomeUiState.HasCharacters -> {
             CharacterScreenContent(
                 charList = state.characters,
-                onClick = { id -> onEvent(CharacterScreenEvent.NavigateToId(id.toString())) }
+                onClick = { id -> onEvent(CharacterRouteEvent.NavigateToId(id.toString())) }
             )
         }
     }

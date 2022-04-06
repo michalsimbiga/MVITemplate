@@ -28,9 +28,8 @@ class GetCharactersUseCaseTest {
 
     @Test
     fun `invokes repository method on call`() = runTest {
-        val result = usecase.invoke()
+        usecase.invoke()
 
         verify(repository, times(1)).getCharacters()
-        Truth.assertThat(result).isEqualTo(listOf(Mocks.charMock))
     }
 }

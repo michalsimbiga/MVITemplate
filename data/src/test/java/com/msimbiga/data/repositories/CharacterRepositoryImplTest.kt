@@ -10,10 +10,13 @@ import com.msimbiga.domain.models.Mocks
 import com.msimbiga.domain.repositories.CharacterRepository
 import com.nhaarman.mockitokotlin2.*
 import com.msimbiga.data.utils.ApiResult
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import okhttp3.internal.cacheGet
 import org.junit.Before
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class CharacterRepositoryImplTest {
 
     private val characterApiService: CharacterApiService = mock()
@@ -67,10 +70,12 @@ class CharacterRepositoryImplTest {
         try {
             repository.getCharacters()
         } catch (exception: Throwable) {
+            catchedError = true
             Truth.assertThat(exception).isInstanceOf(ProjectError.Unknown::class.java)
         }
 
         verify(characterApiService, times(1)).getCharacters()
+        Truth.assertThat(catchedError).isTrue()
     }
 
     @Test
@@ -78,12 +83,16 @@ class CharacterRepositoryImplTest {
         whenever(characterApiService.getCharacterById(any())).thenAnswer { throw ProjectError.Unknown }
         val param = "charId"
 
+        var catchedError = false
+
         try {
             repository.getCharacterById(param)
         } catch (exception: Throwable) {
+            catchedError = true
             Truth.assertThat(exception).isInstanceOf(ProjectError.Unknown::class.java)
         }
 
         verify(characterApiService, times(1)).getCharacterById(param)
+        Truth.assertThat(catchedError).isTrue()
     }
 }

@@ -12,20 +12,8 @@ import com.ramcosta.composedestinations.rememberNavHostEngine
 import timber.log.Timber
 
 @Composable
-fun MainScreen(navigator: Navigator) {
+fun MainScreen() {
     val engine = rememberNavHostEngine()
-    val navController = engine.rememberNavController()
-
-    ComposeFlowCollector(
-        flow = navigator.commandsFlow,
-        lifecycleOwner = LocalLifecycleOwner.current
-    ) {
-        when (val event = it) {
-            is NavigatorEvent.NavigateUp -> navController.navigateUp()
-            is NavigatorEvent.Destin -> navController.navigateTo(event.destination)
-            is NavigatorEvent.Directions -> navController.navigate(event.destination, event.builder)
-        }
-    }
 
     DestinationsNavHost(
         navGraph = NavGraphs.root,

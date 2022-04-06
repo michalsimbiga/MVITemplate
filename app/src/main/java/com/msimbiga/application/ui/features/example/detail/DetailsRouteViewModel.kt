@@ -3,25 +3,33 @@ package com.msimbiga.application.ui.features.example.detail
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
+import com.msimbiga.application.ui.features.example.destinations.DetailsRouteDestination
 import com.msimbiga.application.utils.BaseViewModel
 import com.msimbiga.domain.models.Character
 import com.msimbiga.domain.usecases.GetCharacterByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import timber.log.Timber
 import javax.inject.Inject
 
 data class DetailViewModelState(val character: Character? = null)
 
 @HiltViewModel
-class DetailScreenViewModel @Inject constructor(
+class DetailsRouteViewModel @Inject constructor(
     private val handle: SavedStateHandle,
-    private val navigator: DetailNavigator,
     private val getCharacterByIdUseCase: GetCharacterByIdUseCase
 ) : BaseViewModel() {
 
     private val viewModelState = MutableStateFlow(DetailViewModelState())
+
+    private val navigationEvents = MutableSharedFlow<DetailsScreenDirections>()
+    val navigationEventFlow = navigationEvents.asSharedFlow()
 
     val uiState = viewModelState
         .catch { Timber.d("VUKO Cancelable cached") }
@@ -32,7 +40,7 @@ class DetailScreenViewModel @Inject constructor(
         )
 
     init {
-        DetailScreenDestination.argsFrom(handle).charId.let { charId ->
+        DetailsRouteDestination.argsFrom(handle).charId.let { charId ->
             Timber.d("VUKO Handle char is $charId")
             loadCharacter(charId)
         }
@@ -45,9 +53,8 @@ class DetailScreenViewModel @Inject constructor(
         viewModelState.update { it.copy(character = char) }
     }
 
-    fun navigateBack() {
-        safeLaunch { navigator.navigateBack() }
-    }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun navigateBack() = safeLaunch { navigationEvents.emit(DetailsScreenDirections.Back) }
 
     fun handleEvent(event: DetailsScreenEvent) {
         Timber.d("Event is $event")
@@ -58,7 +65,11 @@ class DetailScreenViewModel @Inject constructor(
     }
 }
 
-sealed class DetailsScreenEvent {
-    object NavigateUp : DetailsScreenEvent()
-    data class LoadData(val id: String) : DetailsScreenEvent()
+sealed interface DetailsScreenEvent {
+    object NavigateUp : DetailsScreenEvent
+    data class LoadData(val id: String) : DetailsScreenEvent
+}
+
+sealed interface DetailsScreenDirections {
+    object Back : DetailsScreenDirections
 }

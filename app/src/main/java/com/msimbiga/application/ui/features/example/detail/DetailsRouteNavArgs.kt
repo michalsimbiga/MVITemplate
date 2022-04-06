@@ -1,5 +1,5 @@
 package com.msimbiga.application.ui.features.example.detail
 
-data class DetailScreenNavArgs(
+data class DetailsRouteNavArgs(
     val charId: String
 )

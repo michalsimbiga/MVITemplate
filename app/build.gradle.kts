@@ -35,12 +35,11 @@ android {
         animationsDisabled = true
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
     kotlin {
         sourceSets {
+            test {
+                kotlin.srcDir("build/generated/ksp/debug/kotlin")
+            }
             debug {
                 kotlin.srcDir("build/generated/ksp/debug/kotlin")
             }
@@ -62,8 +61,12 @@ android {
         kotlinCompilerExtensionVersion = Versions.COMPOSE
     }
 
-    kotlin.sourceSets.all {
-        android.applicationVariants.forEach { variant -> kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin") }
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
     }
 }
 dependencies {
@@ -98,6 +101,7 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:animations-core:1.4.0-beta")
     implementation("io.github.raamcosta.compose-destinations:core:1.4.0-beta")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.4.0-beta")
+    testImplementation("io.github.raamcosta.compose-destinations:core:1.4.0-beta")
 
     // Logging
     implementation(Libs.Utils.TIMBER)
@@ -135,4 +139,8 @@ dependencies {
     androidTestImplementation(Libs.DI.HILT_ANDROID_TESTING)
     // ...with Kotlin.
     kaptAndroidTest(Libs.Test.HILT_COMPILER)
+
+testImplementation("app.cash.turbine:turbine:0.7.0")
+testImplementation("com.google.truth:truth:1.1.3")
+testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
 }

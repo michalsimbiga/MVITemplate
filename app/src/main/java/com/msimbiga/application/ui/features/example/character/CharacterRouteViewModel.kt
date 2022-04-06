@@ -12,13 +12,16 @@ import timber.log.Timber
 import javax.inject.Inject
 
 sealed interface HomeUiState {
+    val characters: List<Character>
 
-    object HasNoCharacters : HomeUiState
+    object HasNoCharacters : HomeUiState {
+        override val characters: List<Character> = emptyList()
+    }
 
-    data class HasCharacters(val characters: List<Character>) : HomeUiState
+    data class HasCharacters(override val characters: List<Character>) : HomeUiState
 }
 
-private data class HomeViewModelState(val characters: List<Character>) {
+data class HomeViewModelState(val characters: List<Character>) {
     fun toUiState(): HomeUiState =
         if (characters.isEmpty()) HomeUiState.HasNoCharacters
         else HomeUiState.HasCharacters(characters = characters)
@@ -26,13 +29,15 @@ private data class HomeViewModelState(val characters: List<Character>) {
 
 
 @HiltViewModel
-class CharacterScreenViewModel @Inject constructor(
+class CharacterRouteViewModel @Inject constructor(
     private val handle: SavedStateHandle,
-    private val navigator: CharacterNavigator,
     private val getCharactersUseCase: GetCharactersUseCase
 ) : BaseViewModel() {
 
     private val viewModelState = MutableStateFlow(HomeViewModelState(characters = listOf()))
+
+    private val navigationEvents = MutableSharedFlow<CharacterDirections>()
+    val navigationEventFlow = navigationEvents.asSharedFlow()
 
     val uiState = viewModelState
         .map { it.toUiState() }
@@ -43,28 +48,32 @@ class CharacterScreenViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun loadData() = safeLaunch {
         val characters = getCharactersUseCase.invoke(Unit)
-
         viewModelState.update { it.copy(characters = characters) }
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun navigateToCharacterId(id: String) = safeLaunch {
-        navigator.navigateToCharacterId(id)
+        navigationEvents.emit(CharacterDirections.CharacterDetail(id))
     }
 
-    fun handleEvent(event: CharacterScreenEvent) {
+    fun handleEvent(event: CharacterRouteEvent) {
         Timber.d("Event is $event")
         when (event) {
-            is CharacterScreenEvent.LoadData -> loadData()
-            is CharacterScreenEvent.NavigateToId -> navigateToCharacterId(event.id)
+            is CharacterRouteEvent.LoadData -> loadData()
+            is CharacterRouteEvent.NavigateToId -> navigateToCharacterId(event.id)
         }
     }
 }
 
-sealed class CharacterScreenEvent {
-    data class NavigateToId(val id: String) : CharacterScreenEvent()
-    object LoadData : CharacterScreenEvent()
+sealed interface CharacterRouteEvent {
+    data class NavigateToId(val id: String) : CharacterRouteEvent
+    object LoadData : CharacterRouteEvent
+}
+
+sealed interface CharacterDirections {
+    object Back : CharacterDirections
+    data class CharacterDetail(val charId: String) : CharacterDirections
 }

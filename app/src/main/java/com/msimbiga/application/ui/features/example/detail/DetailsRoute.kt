@@ -1,5 +1,6 @@
 package com.msimbiga.application.ui.features.example.detail
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,56 +11,48 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.msimbiga.application.ui.features.example.character.CharacterScreenEvent
-import com.msimbiga.application.ui.features.example.character.HomeUiState
 import com.msimbiga.domain.models.Character
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination(navArgsDelegate = DetailsRouteNavArgs::class)
 @Composable
-fun CharacterScreen(
-    state: HomeUiState,
-    onEvent: (CharacterScreenEvent) -> Unit
+fun DetailsRoute(
+    navigator: DestinationsNavigator,
+    viewModel: DetailsRouteViewModel = hiltViewModel()
 ) {
+    val screenState = viewModel.uiState.collectAsState()
+
+    BackHandler {
+        viewModel.handleEvent(DetailsScreenEvent.NavigateUp)
+    }
 
     LaunchedEffect(Unit) {
-        onEvent(CharacterScreenEvent.LoadData)
+        viewModel.navigationEventFlow.collect { destination ->
+            when (destination) {
+                DetailsScreenDirections.Back -> navigator.navigateUp()
+            }
+        }
     }
+
+    DetailScreen(state = screenState.value)
 }
 
-@Destination(navArgsDelegate = DetailScreenNavArgs::class)
-@Composable
-fun DetailsRoute() {
-//    val viewmodel: ViewModel = hiltViewModel()
-//    val screenState = viewmodel.uiState.collectAsState()
-
-//    com.msimbiga.application.ui.features.example.character.CharacterScreen(
-//        state = screenState.value,
-//        onEvent = viewmodel::handleEvent
-//    )
-}
-
-@Destination(navArgsDelegate = DetailScreenNavArgs::class)
 @Composable
 fun DetailScreen(
-    navigator: DestinationsNavigator
+    state: DetailViewModelState,
 ) {
-//
-//    BackHandler {
-//        viewModel.handleEvent(DetailsScreenEvent.NavigateUp)
-//    }
-//
-//    UiStateView(viewModel = viewModel) { state ->
-//        DetailScreenContent(
-//            character = state.chosenChar ?: return@UiStateView,
-//        )
-//    }
+    state.character?.let { char ->
+        DetailScreenContent(character = char)
+    }
 }
 
 @Composable
