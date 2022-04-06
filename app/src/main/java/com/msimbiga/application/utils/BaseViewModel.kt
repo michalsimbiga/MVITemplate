@@ -8,10 +8,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-abstract class BaseViewModel<S : UiStateData>(
-    open val initialState: UiState<S>,
-) : ViewModel(),
-    UiStateManager<S> by UiStateManagerDelegate(initialState) {
+abstract class BaseViewModel() : ViewModel() {
+//    UiStateManager<S> by UiStateManagerDelegate(initialState)
 
     protected fun safeLaunch(
         onFailure: ((Throwable) -> Unit)? = null,

@@ -61,6 +61,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.COMPOSE
     }
+
+    kotlin.sourceSets.all {
+        android.applicationVariants.forEach { variant -> kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin") }
+    }
 }
 dependencies {
 

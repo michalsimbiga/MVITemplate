@@ -2,40 +2,33 @@ package com.msimbiga.application.ui.features.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.navigation.compose.rememberNavController
 import com.msimbiga.application.navigation.Navigator
 import com.msimbiga.application.navigation.NavigatorEvent
 import com.msimbiga.application.ui.features.example.NavGraphs
 import com.msimbiga.application.utils.ComposeFlowCollector
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigateTo
+import com.ramcosta.composedestinations.rememberNavHostEngine
+import timber.log.Timber
 
 @Composable
 fun MainScreen(navigator: Navigator) {
-    val navController = rememberNavController()
+    val engine = rememberNavHostEngine()
+    val navController = engine.rememberNavController()
 
     ComposeFlowCollector(
         flow = navigator.commandsFlow,
         lifecycleOwner = LocalLifecycleOwner.current
     ) {
-        println("Navigation event is $it")
-
         when (val event = it) {
             is NavigatorEvent.NavigateUp -> navController.navigateUp()
+            is NavigatorEvent.Destin -> navController.navigateTo(event.destination)
             is NavigatorEvent.Directions -> navController.navigate(event.destination, event.builder)
-//            is NavigatorEvent.Destin ->
-//                destinationsNavigator.navigate(event.destination, true) {}
         }
     }
 
-    DestinationsNavHost(navGraph = NavGraphs.root)
-
-//    NavHost(
-//        navController = navController,
-//        startDestination = CharacterRoute.destination,
-//    ) {
-//        // Examples
-//        includeCharacterRoute()
-//        includeDetailRoute()
-//    }
+    DestinationsNavHost(
+        navGraph = NavGraphs.root,
+        engine = engine,
+    )
 }

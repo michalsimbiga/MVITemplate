@@ -2,25 +2,34 @@ package com.msimbiga.application.ui.features.example.detail
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
 import com.msimbiga.application.utils.BaseViewModel
-import com.msimbiga.application.utils.UiState
-import com.msimbiga.application.utils.UiStateData
 import com.msimbiga.domain.models.Character
 import com.msimbiga.domain.usecases.GetCharacterByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+
+data class DetailViewModelState(val character: Character? = null)
 
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
     private val handle: SavedStateHandle,
-//    private val navArgs: DetailScreenNavArgs,
     private val navigator: DetailNavigator,
     private val getCharacterByIdUseCase: GetCharacterByIdUseCase
-) : BaseViewModel<DetailsScreenStateData>(
-    initialState = UiState.Loading(DetailsScreenStateData())
-) {
+) : BaseViewModel() {
+
+    private val viewModelState = MutableStateFlow(DetailViewModelState())
+
+    val uiState = viewModelState
+        .catch { Timber.d("VUKO Cancelable cached") }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            viewModelState.value
+        )
 
     init {
         DetailScreenDestination.argsFrom(handle).charId.let { charId ->
@@ -33,7 +42,7 @@ class DetailScreenViewModel @Inject constructor(
     fun loadCharacter(charId: String) = safeLaunch {
         val char = getCharacterByIdUseCase.invoke(charId)
         Timber.d("VUKO Char is ${char.id}")
-        updateUiStateToDefault { it.copy(chosenChar = char) }
+        viewModelState.update { it.copy(character = char) }
     }
 
     fun navigateBack() {
@@ -48,10 +57,6 @@ class DetailScreenViewModel @Inject constructor(
         }
     }
 }
-
-data class DetailsScreenStateData(
-    val chosenChar: Character? = null,
-) : UiStateData
 
 sealed class DetailsScreenEvent {
     object NavigateUp : DetailsScreenEvent()

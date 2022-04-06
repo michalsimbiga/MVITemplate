@@ -3,8 +3,6 @@ package com.msimbiga.application.ui.features.example.character
 import com.msimbiga.application.navigation.Navigator
 import com.msimbiga.application.navigation.NavigatorEvent
 import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
-import com.msimbiga.application.ui.features.example.detail.DetailRoute
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import javax.inject.Inject
 
 interface CharacterNavigator {
@@ -13,7 +11,6 @@ interface CharacterNavigator {
 
 class CharacterNavigatorImpl @Inject constructor(
     private val navigator: Navigator,
-//    private val destinationsNavigator: DestinationsNavigator
 ) : CharacterNavigator {
 
     override suspend fun navigateToCharacterId(charId: String) =

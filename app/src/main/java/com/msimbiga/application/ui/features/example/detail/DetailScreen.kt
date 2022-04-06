@@ -1,6 +1,5 @@
 package com.msimbiga.application.ui.features.example.detail
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,34 +9,57 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.msimbiga.application.utils.uistate.UiStateView
+import com.msimbiga.application.ui.features.example.character.CharacterScreenEvent
+import com.msimbiga.application.ui.features.example.character.HomeUiState
 import com.msimbiga.domain.models.Character
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Composable
+fun CharacterScreen(
+    state: HomeUiState,
+    onEvent: (CharacterScreenEvent) -> Unit
+) {
+
+    LaunchedEffect(Unit) {
+        onEvent(CharacterScreenEvent.LoadData)
+    }
+}
+
+@Destination(navArgsDelegate = DetailScreenNavArgs::class)
+@Composable
+fun DetailsRoute() {
+//    val viewmodel: ViewModel = hiltViewModel()
+//    val screenState = viewmodel.uiState.collectAsState()
+
+//    com.msimbiga.application.ui.features.example.character.CharacterScreen(
+//        state = screenState.value,
+//        onEvent = viewmodel::handleEvent
+//    )
+}
+
 @Destination(navArgsDelegate = DetailScreenNavArgs::class)
 @Composable
 fun DetailScreen(
-    viewModel: DetailScreenViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-
-    BackHandler {
-        viewModel.handleEvent(DetailsScreenEvent.NavigateUp)
-    }
-
-    UiStateView(viewModel = viewModel) { state ->
-        DetailScreenContent(
-            character = state.chosenChar ?: return@UiStateView,
-        )
-    }
+//
+//    BackHandler {
+//        viewModel.handleEvent(DetailsScreenEvent.NavigateUp)
+//    }
+//
+//    UiStateView(viewModel = viewModel) { state ->
+//        DetailScreenContent(
+//            character = state.chosenChar ?: return@UiStateView,
+//        )
+//    }
 }
 
 @Composable
@@ -61,7 +83,7 @@ fun CharacterDescription(modifier: Modifier = Modifier, character: Character) {
     LazyColumn(
         modifier = modifier
             .border(2.dp, Color.Cyan)
-            .testTag(DetailRoute.LIST_TAG),
+            .testTag(DetailConsts.LIST_TAG),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically)
     ) {

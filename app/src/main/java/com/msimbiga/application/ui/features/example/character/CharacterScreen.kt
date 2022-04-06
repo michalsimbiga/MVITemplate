@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,28 +24,42 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.msimbiga.application.ui.features.example.destinations.DetailScreenDestination
-import com.msimbiga.application.utils.uistate.UiStateView
 import com.msimbiga.domain.models.Character
 import com.msimbiga.domain.models.Mocks
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination(start = true)
 @Composable
+fun CharacterRoute() {
+    val viewmodel: CharacterScreenViewModel = hiltViewModel()
+    val screenState = viewmodel.uiState.collectAsState()
+
+    CharacterScreen(
+        state = screenState.value,
+        onEvent = viewmodel::handleEvent
+    )
+}
+
+@Composable
 fun CharacterScreen(
-    viewModel: CharacterScreenViewModel = hiltViewModel(),
+    state: HomeUiState,
+    onEvent: (CharacterScreenEvent) -> Unit
 ) {
-    LaunchedEffect(viewModel) {
-        viewModel.handleEvent(CharacterScreenEvent.LoadData)
+
+    LaunchedEffect(Unit) {
+        onEvent(CharacterScreenEvent.LoadData)
     }
 
-    UiStateView(viewModel = viewModel) { state ->
-        CharacterScreenContent(
-            charList = state.characters,
-            {}
-//            onClick = { id -> navigator.navigate(DetailScreenDestination(id.toString())) }
-        )
+    when (state) {
+        is HomeUiState.HasNoCharacters -> {
+            CircularProgressIndicator()
+        }
+        is HomeUiState.HasCharacters -> {
+            CharacterScreenContent(
+                charList = state.characters,
+                onClick = { id -> onEvent(CharacterScreenEvent.NavigateToId(id.toString())) }
+            )
+        }
     }
 }
 
@@ -52,7 +68,7 @@ fun CharacterScreenContent(charList: List<Character>, onClick: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .testTag(CharacterRoute.LIST_TAG),
+            .testTag(CharacterConsts.LIST_TAG),
         verticalArrangement = Arrangement.spacedBy(space = 8.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
